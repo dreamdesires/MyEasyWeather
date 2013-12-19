@@ -1,15 +1,16 @@
 package com.easyweather;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +18,9 @@ import android.widget.Toast;
 import com.easyweather.logic.WeatherAPIConfig;
 import com.easyweather.ui.LoadDialog;
 import com.easyweather.util.DataUtil;
+import com.easyweather.util.FileUtil;
 import com.easyweather.util.HttpClient;
+import com.easyweather.util.ULog;
 import com.easyweather.util.UToast;
 import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
@@ -32,10 +35,26 @@ public class ContentAct extends BaseAct{
 	private TextView tv_week;
 	private TextView tv_tab;
 	private LoadDialog loadDialog;
+	private int curposition;
 	
+	public  static JSONArray weatherArray=new JSONArray();
+	
+	public void saveLocalCityWeather(JSONObject weatherObj){
+		Editor editor = EasyApp.mPreWeather.edit();
+		try {
+			weatherArray.put(curposition, weatherObj);
+			editor.putString("weatherInfo", weatherArray.toString());
+			editor.commit();
+			//ULog.e("success", "success!");
+		} catch (JSONException e) {
+			ULog.e("error", "ContentAct:"+e.getMessage());
+		}
+		ULog.e("weatherArray", weatherArray.toString());
+	}
 	
 	
 	Handler handler=new Handler(){
+
 		public void handleMessage(android.os.Message msg) {
 			super.handleMessage(msg);
 			if(msg.arg1==1){
@@ -49,8 +68,22 @@ public class ContentAct extends BaseAct{
 						tv_temperature.setText(String.format("%s:%s",EasyApp.res.getString(R.string.curcityweather),obj.getString("temp1")));
 						loadImage(iv_weather,obj.getString("img1"));//设置当前天气图片
 						tv_wellbeing.setText(obj.getString("weather1"));//天气描述
+						obj.put("imagename", obj.getString("img1"));
+						//ULog.e("imagename", FileUtil.getFile().getImagePath(obj.getString("img1")));
+						saveLocalCityWeather(obj);
 						
-						
+						//if(indexStr.equals("0")){
+							//Intent intent = new Intent();
+							//intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+							////要发送的内容
+							//Bundle bundle=new Bundle();
+							//bundle.putString("month", obj.getString("date_y"));
+							//bundle.putString("week", obj.getString("week"));
+							//bundle.putString("temp", obj.getString("weather1"));
+							//intent.putExtra("weatherInfo", bundle);
+							//发送 一个无序广播
+							//ContentAct.this.sendBroadcast(intent);
+						//}
 					} catch (JSONException e) {
 						
 						UToast.makeText(ContentAct.this, e.getMessage(), Toast.LENGTH_SHORT);
@@ -60,6 +93,8 @@ public class ContentAct extends BaseAct{
 			}
 		};
 	};
+	
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +120,10 @@ public class ContentAct extends BaseAct{
 		if (intent.hasExtra("jsonobj")) {
 			try {
 				JSONObject obj=new JSONObject(intent.getStringExtra("jsonobj"));
-				//tv_title.setText(String.format("%s:%s", EasyApp.res.getString(R.string.curcity),obj.getString("name")));
+				curposition = obj.getInt("codeindex");
 				Bundle bundle=new Bundle();
 				bundle.putString("city",obj.getString("code"));
+				
 				loadTemperData(bundle);
 			} catch (JSONException e) {
 				UToast.makeText(ContentAct.this, e.getMessage(), Toast.LENGTH_SHORT);
@@ -104,13 +140,13 @@ public class ContentAct extends BaseAct{
 					@Override
 					public void onSuccess(String content) {
 						super.onSuccess(content);
-						Log.e("content", content);
+						//Log.e("content", content);
 						data=content;
 						Message msg=handler.obtainMessage();
 						msg.arg1=1;
 						handler.sendMessage(msg);
 					}
-		
+					
 					@Override
 					public void onStart() {
 						super.onStart();
@@ -133,7 +169,11 @@ public class ContentAct extends BaseAct{
 		//http://m.weather.com.cn/img/b1.gif
 		Bitmap bitmap =HttpClient.getBitmap(imgurl);
 		if(bitmap!=null){
-			img.setImageBitmap(bitmap);
+			
+			FileUtil.getFile().saveSDCard(imgurl, bitmap);
+			img.setImageBitmap(FileUtil.getFile().getSDImage(FileUtil.getFile().getImagePath(imgurl)));
+			//img.setImageBitmap(bitmap);
+			UToast.makeText(ContentAct.this, "保存图片成功", Toast.LENGTH_SHORT);
 		}
 	}
 }

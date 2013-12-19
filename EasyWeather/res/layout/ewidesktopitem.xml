@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lin_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:padding="10dip"
+    android:orientation="horizontal" >
+
+    <!-- @drawable/widget_bg -->
+    <!-- 当前天气图标 -->
+
+    <ImageView
+        android:id="@+id/iv_curWeatherImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip" />
+    <!-- 当前温度 -->
+
+    <TextView
+        android:id="@+id/tv_curWeathertemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="@string/defaulttext"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp20"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:orientation="vertical" >
+
+        <!-- 星期 -->
+
+        <TextView
+            android:id="@+id/tv_curweek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="@string/defaulttext"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+        <!-- 月份 -->
+
+        <TextView
+            android:id="@+id/tv_curmonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:text="@string/defaulttext"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

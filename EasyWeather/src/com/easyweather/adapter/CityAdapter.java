@@ -64,6 +64,8 @@ public class CityAdapter extends CustomBaseAdapter{
 						temp.put("status", isChecked);
 						temp.put("name", cityObj.getString("name"));
 						temp.put("code", cityObj.getString("code"));
+						temp.put("codeindex", curposition);
+						//ULog.e("CityAdapter", "CityAdapter:"+curposition);
 						saveArray.put(curposition, temp);
 						saveLocalCity(saveArray);
 						
@@ -103,7 +105,7 @@ public class CityAdapter extends CustomBaseAdapter{
 		editor.putString("localcity", jsonArray.toString());
 		editor.commit();
 	}
-	
+
 	public void updateLayout(JSONArray jsonArray){
 		this.array=jsonArray;
 		notifyDataSetChanged();

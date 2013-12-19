@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="45dip"
+    android:background="@drawable/headertitlebg"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/iv_indexback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:background="@drawable/back"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_indextitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/indexhtitlesize" />
+
+    <Button
+        android:id="@+id/btn_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/sp14"
+        android:visibility="gone"
+        android:layout_marginRight="10dip"
+        android:textColor="@drawable/readbtntextbg"
+        android:background="@drawable/headerbtnbg" />
+
+    <!-- android:background="@drawable/logindialogtitlebuttonamt" -->
+</RelativeLayout>

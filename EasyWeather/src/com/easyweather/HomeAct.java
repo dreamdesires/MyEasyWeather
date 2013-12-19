@@ -8,9 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.easyweather.adapter.ViewPagerAdapter;
-import com.easyweather.util.UToast;
-
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +17,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.easyweather.adapter.ViewPagerAdapter;
+import com.easyweather.util.UToast;
+
 public class HomeAct extends BaseAct implements OnClickListener{
 
 	private ViewPager viewpager;
@@ -28,7 +28,7 @@ public class HomeAct extends BaseAct implements OnClickListener{
 	ArrayList<View> viewlist=null;
 	JSONArray jsonArray=null;
 	private ViewPagerAdapter adapter;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,6 +36,7 @@ public class HomeAct extends BaseAct implements OnClickListener{
 		init();
 		manager = new LocalActivityManager(this, false);
 		manager.dispatchCreate(savedInstanceState);
+		
 		getIntentData();
 		adapter = new ViewPagerAdapter(this, viewlist);
 		viewpager.setAdapter(adapter);
@@ -67,7 +68,7 @@ public class HomeAct extends BaseAct implements OnClickListener{
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject obj=jsonArray.getJSONObject(i);
 					if(obj.getBoolean("status")){
-						addTab(ContentAct.class, obj, obj.getString("name"), true);
+						addTab(ContentAct.class, obj, obj.getString("name"), true,i);
 					}
 				}
 				
@@ -89,9 +90,10 @@ public class HomeAct extends BaseAct implements OnClickListener{
 	 * @param title
 	 * @return
 	 */
-	public void  addTab(Class<?> t,JSONObject obj,String title,boolean isload){
+	public void  addTab(Class<?> t,JSONObject obj,String title,boolean isload,int index){
 		Intent addIntent=new Intent(HomeAct.this,t);
 		addIntent.putExtra("jsonobj", obj.toString());
+		//addIntent.putExtra("index", index);
 		destroy(title, manager);
 		View view =manager.startActivity(title, addIntent).getDecorView();
 		viewlist.add(view);

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lin_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/alpha"
+    android:orientation="horizontal" >
+
+    <!-- 当前天气图标 -->
+
+    <ImageView
+        android:id="@+id/iv_curWeatherImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/addsub" />
+    <!-- 当前温度 -->
+
+    <TextView
+        android:id="@+id/tv_curWeathertemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/defaulttext"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp20"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- 星期 -->
+
+        <TextView
+            android:id="@+id/tv_curweek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defaulttext"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+        <!-- 月份 -->
+
+        <TextView
+            android:id="@+id/tv_curmonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defaulttext"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

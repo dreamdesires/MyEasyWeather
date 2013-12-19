@@ -25,6 +25,7 @@ import com.easyweather.adapter.CityAdapter;
 import com.easyweather.map.LocationInfo;
 import com.easyweather.util.ULog;
 import com.easyweather.util.UToast;
+import com.easyweather.widget.UpdateService;
 
 public class SelectCityAct extends BaseLocationAct implements OnItemClickListener,OnClickListener{
 	
@@ -107,8 +108,9 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 			try {
 				JSONObject obj=new JSONObject();
 				obj.put("status",false);
-				obj.put("code", addressCode[i]);
-				obj.put("name", addressName[i]);
+				obj.put("code", addressCode[i]);//城市代码
+				obj.put("name", addressName[i]);//城市名称
+				obj.put("index",i);
 				saveArray.put(obj);
 				array.put(obj);
 			} catch (JSONException e) {
@@ -175,6 +177,10 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 			intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 			startActivity(intent);
 			SelectCityAct.this.finish();
+			
+			Intent serviceIntent=new Intent(SelectCityAct.this,UpdateService.class);
+			stopService(serviceIntent);
+			startService(serviceIntent);
 			break;
 		default:
 			break;
