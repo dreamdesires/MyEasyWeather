@@ -36,7 +36,7 @@ public class ContentAct extends BaseAct{
 	private TextView tv_tab;
 	private LoadDialog loadDialog;
 	private int curposition;
-	
+	JSONObject cityobj=null;
 	public  static JSONArray weatherArray=new JSONArray();
 	
 	public void saveLocalCityWeather(JSONObject weatherObj){
@@ -51,8 +51,7 @@ public class ContentAct extends BaseAct{
 		}
 		ULog.e("weatherArray", weatherArray.toString());
 	}
-	
-	
+
 	Handler handler=new Handler(){
 
 		public void handleMessage(android.os.Message msg) {
@@ -69,6 +68,7 @@ public class ContentAct extends BaseAct{
 						loadImage(iv_weather,obj.getString("img1"));//设置当前天气图片
 						tv_wellbeing.setText(obj.getString("weather1"));//天气描述
 						obj.put("imagename", obj.getString("img1"));
+						
 						//ULog.e("imagename", FileUtil.getFile().getImagePath(obj.getString("img1")));
 						saveLocalCityWeather(obj);
 						
@@ -119,10 +119,10 @@ public class ContentAct extends BaseAct{
 		Intent intent = getIntent();
 		if (intent.hasExtra("jsonobj")) {
 			try {
-				JSONObject obj=new JSONObject(intent.getStringExtra("jsonobj"));
-				curposition = obj.getInt("codeindex");
+				cityobj=new JSONObject(intent.getStringExtra("jsonobj"));
+				curposition = cityobj.getInt("codeindex");
 				Bundle bundle=new Bundle();
-				bundle.putString("city",obj.getString("code"));
+				bundle.putString("city",cityobj.getString("code"));
 				
 				loadTemperData(bundle);
 			} catch (JSONException e) {

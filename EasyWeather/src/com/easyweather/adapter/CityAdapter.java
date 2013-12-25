@@ -5,14 +5,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RemoteViews;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
@@ -20,6 +24,7 @@ import com.easyweather.EasyApp;
 import com.easyweather.HomeAct;
 import com.easyweather.R;
 import com.easyweather.util.ULog;
+import com.easyweather.widget.EasyWeatherProvider;
 
 public class CityAdapter extends CustomBaseAdapter{
 
@@ -94,7 +99,54 @@ public class CityAdapter extends CustomBaseAdapter{
 		return view;
 	}
 	
+	/**
+	 * 更新桌面widget
+	 * @param obj
+	 */
+	public void serviceUpate(JSONObject obj){
+		AppWidgetManager manager=AppWidgetManager.getInstance(mContext);
+		RemoteViews views;
+		views = EasyWeatherProvider.updateVIew(mContext,obj,true);
+		int[] appids=manager.getAppWidgetIds(new ComponentName(mContext, EasyWeatherProvider.class));
+		manager.updateAppWidget(appids, views);
+	}
 
+	/**
+	 * 获取当前首选城市的天气
+	 */
+	JSONObject curWidgetCity=null;
+	public void  getCurLocalCity(JSONArray array){
+		String defualtCity="";
+		try {
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject tempCityObj=array.getJSONObject(i);
+				if(tempCityObj.getBoolean("status")){
+					defualtCity=tempCityObj.getString("name");
+					break;
+				}
+			}
+			
+			if(EasyApp.mPreWeather.contains("weatherInfo") && !TextUtils.isEmpty(EasyApp.mPreWeather.getString("weatherInfo", ""))){
+				String weather=EasyApp.mPreWeather.getString("weatherInfo", "");
+				String splite=weather.replaceAll("null,", "");
+				JSONArray weatherArray;
+				
+					weatherArray = new JSONArray(splite);
+					for (int i = 0; i < weatherArray.length(); i++) {
+						JSONObject tempObj=weatherArray.getJSONObject(i);
+						if(tempObj.getString("city").equals(defualtCity)){
+							serviceUpate(tempObj);
+							break;
+						}
+					}
+				
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * 保存选择的城市
@@ -104,6 +156,7 @@ public class CityAdapter extends CustomBaseAdapter{
 		Editor editor = EasyApp.mPreCity.edit();
 		editor.putString("localcity", jsonArray.toString());
 		editor.commit();
+		getCurLocalCity(jsonArray);
 	}
 
 	public void updateLayout(JSONArray jsonArray){
@@ -118,7 +171,6 @@ public class CityAdapter extends CustomBaseAdapter{
 	public JSONArray getDataArray(){
 		return saveArray;
 	}
-	
 }
 
 class HomeViewHolder{
