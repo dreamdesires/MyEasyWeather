@@ -30,7 +30,7 @@ import com.easyweather.widget.UpdateService;
 public class SelectCityAct extends BaseLocationAct implements OnItemClickListener,OnClickListener{
 	
 	private JSONArray array;
-	JSONArray saveArray=null;
+	//JSONArray saveArray=null;
 	private GridView gd;
 	private CityAdapter adapter;
 	String code=null;
@@ -45,7 +45,7 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 		readLocalCity();
 		init();
 		
-		if(EasyApp.isLocation){//定位
+		if(EasyApp.isLocation){//定位暂时没有添加定位功能
 			initMapInfo();
 			startLocation();
 			getSendLocInfo(new LocationCallBack() {
@@ -89,7 +89,6 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 					obj.put("status", true);
 					//设置当前所在的城市
 					curLocation.setText(String.format("%s%s",EasyApp.res.getString(R.string.curcity),obj.getString("name")));
-					saveArray.put(i,obj);
 					array.put(i, obj);
 				}
 			} catch (JSONException e) {
@@ -100,7 +99,6 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 
 	public JSONArray getAddressArray(){
 		array = new JSONArray();
-		saveArray=new JSONArray();
 		String[] addressCode=getResources().getStringArray(R.array.addresscode);
 		String[] addressName=getResources().getStringArray(R.array.addressname);
 		
@@ -111,7 +109,7 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 				obj.put("code", addressCode[i]);//城市代码
 				obj.put("name", addressName[i]);//城市名称
 				obj.put("index",i);
-				saveArray.put(obj);
+				//saveArray.put(obj);
 				array.put(obj);
 			} catch (JSONException e) {
 				UToast.makeText(SelectCityAct.this, e.getMessage(), Toast.LENGTH_SHORT);
@@ -132,7 +130,7 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 				curstatus=true;
 			}
 			obj.put("status",curstatus);
-			saveArray.put(arg2, obj);
+			//saveArray.put(arg2, obj);
 			array.put(arg2, obj);
 			//saveLocalCity(saveArray);
 			adapter.updateLayout(array);
@@ -149,7 +147,7 @@ public class SelectCityAct extends BaseLocationAct implements OnItemClickListene
 	 * 2.若本地不存在显示全部城市，并将所有城市显示同时设置所有的城市是未选中状态
 	 */
 	public void readLocalCity(){
-		String localStr=EasyApp.mPreCity.getString("localcity", "");
+		String localStr=EasyApp.mPreCity.getString("alllocalcity", "");
 	
 		if (!TextUtils.isEmpty(localStr)) {
 			try {

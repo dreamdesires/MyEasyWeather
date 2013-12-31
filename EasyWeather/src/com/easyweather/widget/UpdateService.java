@@ -30,7 +30,7 @@ public class UpdateService extends Service{
 	Context mContext;
 	private Timer mTimer;
 	JSONObject obj=null;
-	Bundle bundle=null;
+	 Bundle bundle=null;
 	
 	Handler mHandler=new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -41,6 +41,7 @@ public class UpdateService extends Service{
 			if (msg.arg1==1) {
 				getLocalCity();
 				loadTemperData(bundle);
+				//addNotificaction();
 				
 			}else if (msg.arg1==2) {
 				try {
@@ -79,13 +80,14 @@ public class UpdateService extends Service{
 		            	msg.arg1=1;
 		                mHandler.sendMessage(msg);              
 		            }
-		        },60*60*1000, 60*60*1000); 
+		        },60*1000, 60*1000); 
 	}
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		return super.onStartCommand(intent, flags, startId);
 	}
+	
 	
 	/**
 	 * 更新桌面widget
@@ -108,22 +110,17 @@ public class UpdateService extends Service{
 	/**
 	 * 从本地文件中读取第一个城市作为桌面的widget显示的城市
 	 */
-	public void getLocalCity(){
-		String localCity = EasyApp.mPreCity.getString("localcity", "");
+	public  void getLocalCity(){
+		String localCity = EasyApp.mAddCityPre.getString("addlocalcity", "");
 		if(!TextUtils.isEmpty(localCity)){
 			try {
 				JSONArray localCityArray=new JSONArray(localCity);
-				for (int i = 0; i < localCityArray.length(); i++) {
-					JSONObject localCityObj=localCityArray.getJSONObject(i);
-					if (localCityObj.getBoolean("status")) {
-						bundle.putString("city",localCityObj.getString("code"));
-						break;
-					}
-				}
+				JSONObject localCityObj=localCityArray.getJSONObject(0);
+				bundle.putString("city",localCityObj.getString("code"));
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	
@@ -143,4 +140,5 @@ public class UpdateService extends Service{
 					}
 				});
 	}
+	
 }

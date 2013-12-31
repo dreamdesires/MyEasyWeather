@@ -16,7 +16,7 @@ public class ULog {
 	/**
 	 * 打开或关闭调试LOG
 	 */
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	public static final String TAG = "TAG";
 	

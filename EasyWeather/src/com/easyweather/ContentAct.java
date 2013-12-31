@@ -49,7 +49,7 @@ public class ContentAct extends BaseAct{
 		} catch (JSONException e) {
 			ULog.e("error", "ContentAct:"+e.getMessage());
 		}
-		ULog.e("weatherArray", weatherArray.toString());
+		//ULog.e("weatherArray", weatherArray.toString());
 	}
 
 	Handler handler=new Handler(){
@@ -132,7 +132,10 @@ public class ContentAct extends BaseAct{
 	}
 	
 	
-	
+	/**
+	 * 从网络上获取当前城市的天气信息
+	 * @param params
+	 */
 	public void loadTemperData(Bundle params){
 		String URL=DataUtil.getDataUtil().buildURL(WeatherAPIConfig.getWeatherInfo,params);
 		AsyncHttpClient client = new AsyncHttpClient();
@@ -173,7 +176,7 @@ public class ContentAct extends BaseAct{
 			FileUtil.getFile().saveSDCard(imgurl, bitmap);
 			img.setImageBitmap(FileUtil.getFile().getSDImage(FileUtil.getFile().getImagePath(imgurl)));
 			//img.setImageBitmap(bitmap);
-			UToast.makeText(ContentAct.this, "保存图片成功", Toast.LENGTH_SHORT);
+			//UToast.makeText(ContentAct.this, "保存图片成功", Toast.LENGTH_SHORT);
 		}
 	}
 }

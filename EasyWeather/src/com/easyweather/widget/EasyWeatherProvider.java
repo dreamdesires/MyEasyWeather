@@ -87,8 +87,8 @@ public class EasyWeatherProvider extends AppWidgetProvider{
 	 * 获取当前首选城市的天气
 	 */
 	public void  getCurLocalCity(){
-		if(EasyApp.mPreCity.contains("localcity")){
-			String defaultCity = EasyApp.mPreCity.getString("localcity", "");
+		if(EasyApp.mAddCityPre.contains("addlocalcity")){
+			String defaultCity = EasyApp.mAddCityPre.getString("addlocalcity", "");
 			try {
 				JSONArray defaultArray=new JSONArray(defaultCity);
 				for (int i = 0; i < defaultArray.length(); i++) {
